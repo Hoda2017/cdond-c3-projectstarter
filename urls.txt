@@ -3,3 +3,13 @@ https://github.com/Hoda2017/cdond-c3-projectstarter
 
 
 URL02 S3 Bucket 
+
+
+URL03 CloudFront
+
+
+URL04 Deployed application back-end in EC2
+
+
+
+URL05 Prometheus Server
