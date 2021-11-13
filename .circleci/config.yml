@@ -138,7 +138,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: cimg/base:2020.01
+      - image: amazon/aws-cli
     steps:
       - checkout
       - aws-cli/setup
@@ -432,7 +432,7 @@ jobs:
 
 cleanup:
     docker:
-        - image: cimg/base:2020.01
+        - image: amazon/aws-cli
     steps:
       - checkout
       - aws-cli/setup
