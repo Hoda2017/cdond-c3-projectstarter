@@ -141,7 +141,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - aws-cli/setup
+      
       - run:
           name: Install tar utility
           command: |
@@ -239,7 +239,6 @@ jobs:
      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - aws-cli/setup
       - run:
           name: Run migrations
           command: |
@@ -306,7 +305,7 @@ jobs:
             ls -la
             cat .env
             npm run build
-      - aws-cli/setup   
+      
 
       - run:
           name: Deploy frontend objects
@@ -435,7 +434,6 @@ cleanup:
         - image: amazon/aws-cli
     steps:
       - checkout
-      - aws-cli/setup
       - run:
           name: Get old stack workflow id
           command: |
