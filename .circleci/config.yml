@@ -53,9 +53,10 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            sudo npm install webpack-dev-server -g
-            sudo npm install
-            sudo npm run build
+             npm install
+             npm update
+             npm audit fix
+             npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -72,6 +73,8 @@ jobs:
           command: |
               cd backend
               npm i
+              npm update
+              npm audit fix
               npm run build
       - persist_to_workspace:
           root: ~/
