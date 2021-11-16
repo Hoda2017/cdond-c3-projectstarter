@@ -7,6 +7,10 @@ parameters:
   memstash-token:
       type: string
       default: "b9461c43-6888-4d04-8e76-7beeddbb863c"
+
+  orbs:
+  slack: circleci/slack@4.5.0 
+
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -42,6 +46,9 @@ commands:
             fi
             
 jobs:
+
+ 
+
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -60,6 +67,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - slack/status    
 
   build-backend:
     docker:
@@ -84,7 +92,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-
+      - slack/status
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -97,6 +105,8 @@ jobs:
           command: |
             cd frontend
             npm run test
+
+      - slack/status      
                 
   test-backend:
     docker:
@@ -110,7 +120,7 @@ jobs:
           command: |
             cd backend
             npm run test
-            
+       - slack/status    
   scan-frontend:
     docker:
        - image: circleci/node:13.8.0
@@ -125,7 +135,7 @@ jobs:
             npm i
             npm audit --audit-level=critical
     
-
+       - slack/status
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -139,7 +149,7 @@ jobs:
             cd backend
             npm i
             npm audit --audit-level=critical
-
+       - slack/status
 
   deploy-infrastructure:
     docker:
@@ -196,7 +206,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-            
+      - slack/status      
 
   configure-infrastructure:
     docker:
@@ -238,7 +248,7 @@ jobs:
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
       - destroy-environment    
-
+      - slack/status
   run-migrations:
     docker:
      - image: circleci/node:13.8.0
@@ -277,7 +287,7 @@ jobs:
       - revert-migrations
       - destroy-environment
      # Here's where you will add some code to rollback on failure      
-
+      - slack/status
   deploy-frontend:
     docker:
         - image: circleci/node:13.8.0
@@ -318,7 +328,7 @@ jobs:
              aws s3 cp --recursive frontend/dist "s3://udapeople-<< pipeline.parameters.workflow-id >>"
       - revert-migrations
       - destroy-environment    
-                    
+      - slack/status              
   deploy-backend:
     docker:
      - image: python:3.7-alpine3.11
@@ -357,6 +367,7 @@ jobs:
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
       - revert-migrations
       - destroy-environment
+      - slack/status
   smoke-test:
     docker:
        - image: python:3.7-alpine3.11
@@ -401,7 +412,7 @@ jobs:
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
       - revert-migrations
       - destroy-environment 
-
+      - slack/status
   cloudfront-update:
     docker:
          - image: python:3.7-alpine3.11
@@ -433,7 +444,7 @@ jobs:
               --tags project=udapeople
       - revert-migrations
       - destroy-environment
-
+      - slack/status
   cleanup:
     docker:
         - image: amazon/aws-cli
@@ -454,6 +465,8 @@ jobs:
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               fi
+
+      - slack/status        
 workflows:
   default:
     jobs:
