@@ -152,12 +152,6 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: 
-          name: "Install git and SSH client"
-          command: |
-            yum install git
-            sudo apt install openssh-server
-             
       - checkout
       - run:
           name: Install tar utility
@@ -166,11 +160,8 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-            aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project=udapeople-backend-<< pipeline.parameters.workflow-id >>
-              --stack-name "udapeople-backend-<< pipeline.parameters.workflow-id >>"\
-              --parameter-overrides ID="<< pipeline.parameters.workflow-id >>"  
+            echo <<pipeline.parameters.workflow-id>>
+            aws cloudformation deploy  --template-file .circleci/files/backend.yml --tags project="udapeople-backend-<< pipeline.parameters.workflow-id >>" --stack-name "udapeople-backend-<< pipeline.parameters.workflow-id >>"   --parameter-overrides ID="<< pipeline.parameters.workflow-id >>"  
              
       - run:
           name: Ensure front-end infrastructure exist
