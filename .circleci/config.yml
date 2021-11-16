@@ -161,8 +161,6 @@ jobs:
                 git \ 
                 openssh-client
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["60:38:8e:12:d6:9f:ef:76:27:fa:f3:82:00:14:86:ed"]
       - run:
           name: Install tar utility
           command: |
