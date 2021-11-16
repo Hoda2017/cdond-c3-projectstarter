@@ -152,12 +152,6 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: 
-          name: "Install git and SSH client"
-          command: |
-            #yum install git
-            #sudo apt install openssh-server
-            yum load-transaction /tmp/yum_save_tx.2021-11-16.19-38.x6nciO.yumtx
       - checkout
       - run:
           name: Install tar utility
