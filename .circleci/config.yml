@@ -152,12 +152,13 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      # - run: 
-      #     name: "Install git and SSH client"
-      #     command: |
-      #       apk add git  
-               
-      # - checkout
+      - run: 
+          name: "Install git and SSH client"
+          command: |
+            yum install git
+            sudo apt install openssh-server
+             
+      - checkout
       - run:
           name: Install tar utility
           command: |
