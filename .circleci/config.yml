@@ -156,7 +156,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      
+      - add_ssh_keys:
+          fingerprints: ["60:38:8e:12:d6:9f:ef:76:27:fa:f3:82:00:14:86:ed"]
       - run:
           name: Install tar utility
           command: |
@@ -214,7 +215,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["af:92:30:b4:37:59:63:43:79:03:3a:0e:6b:d7:6d:46"]
+          fingerprints: ["60:38:8e:12:d6:9f:ef:76:27:fa:f3:82:00:14:86:ed"]
       # Add ssh keys with fingerprint
       - attach_workspace:
           at: ~/
@@ -335,7 +336,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["af:92:30:b4:37:59:63:43:79:03:3a:0e:6b:d7:6d:46"]
+          fingerprints: ["60:38:8e:12:d6:9f:ef:76:27:fa:f3:82:00:14:86:ed"]
       - attach_workspace:
           at: ~/
   
