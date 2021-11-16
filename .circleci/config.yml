@@ -152,7 +152,14 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: apt-get update && apt-get install -y openssh-client git
+      - run: 
+          name: "Install git and SSH client"
+          command: |
+            apk add \ 
+                --update \
+                --no-progress \
+                git \ 
+                openssh-client
       - checkout
       - add_ssh_keys:
           fingerprints: ["60:38:8e:12:d6:9f:ef:76:27:fa:f3:82:00:14:86:ed"]
