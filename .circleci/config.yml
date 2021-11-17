@@ -227,9 +227,8 @@ jobs:
               echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-              ansible-playbook \
-                -i .circleci/ansible/inventory.txt \
-                .circleci/ansible/configure-server.yml
+              cd .circleci/ansible
+              ansible-playbook -i inventory.txt configure-server.yml
       #  rollback on failure  
       - run:
           name: Install AWS CLI for rollback
@@ -238,6 +237,7 @@ jobs:
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
       - destroy-environment    
       - slack/status
+
   run-migrations:
     docker:
      - image: circleci/node:13.8.0
