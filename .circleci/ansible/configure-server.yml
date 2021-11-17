@@ -19,7 +19,7 @@
         timeout: 600
 
     - name: "install python for Ansible."
-    - run :
+      run :
         command: |
            sudo apt update
            sudo apt install software-properties-common
