@@ -20,10 +20,8 @@ commands:
           when: on_fail
           command: |
             aws s3 rm --recursive s3://udapeople-<< pipeline.parameters.workflow-id >>
-            aws cloudformation delete-stack \
-              --stack-name "udapeople-backend-<< pipeline.parameters.workflow-id >>"
-            aws cloudformation delete-stack \
-              --stack-name "udapeople-frontend-<< pipeline.parameters.workflow-id >>"
+            aws cloudformation delete-stack  --stack-name "udapeople-backend-<< pipeline.parameters.workflow-id >>"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< pipeline.parameters.workflow-id >>"
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -261,9 +259,9 @@ jobs:
             # ---
             cd backend
             sudo npm install
-            # npm audit fix --audit-level=critical --force
-            # sudo npm run build
-            sudo npm run migrations > migration.log
+            npm audit fix --audit-level=critical --force
+            sudo npm run build
+            sudo npm run migrations >> migration.log
             cat migration.log
             migration_status=$(cat migration.log | grep -c "has been executed successfully")
             if [ $migration_status > 0 ]; then exit 0; else exit 1; fi;
@@ -297,7 +295,7 @@ jobs:
           command: |
             export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo ENVIRONMENT=production > "frontend/.env"
+            echo ENVIRONMENT=production >> "frontend/.env"
             echo NODE_ENV=production >> "frontend/.env"
             echo API_URL=$API_URL >> "frontend/.env"
             echo $API_URL
