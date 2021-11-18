@@ -37,7 +37,7 @@ commands:
             npm install
             npm run migrations:revert
             
-orbs:
+orbs: 
     slack: circleci/slack@3.4.2         
 jobs:
   build-frontend:
@@ -238,7 +238,7 @@ jobs:
   run-migrations:
     docker:
      - image: circleci/node:13.8.0
-    steps:
+    steps:  
       - checkout
       - run:
           name: Run migrations
@@ -289,6 +289,7 @@ jobs:
              cd frontend
              npm install webpack-dev-server -g
              npm install
+            
       - run:
           name: Get backend url
           command: |
@@ -315,7 +316,6 @@ jobs:
           command: |
            
              cd frontend 
-             
              aws s3 cp --recursive ./dist "s3://udapeople-<< pipeline.parameters.workflow-id >>"
       - revert-migrations
       - destroy-environment    
@@ -341,7 +341,7 @@ jobs:
             apk add --update ansible openssh-client tar gzip 
 
       - restore_cache:
-          keys: ["backend-dist"] 
+          keys: ["backend-dist"]  
 
       - run:
           name: Deploy backend
