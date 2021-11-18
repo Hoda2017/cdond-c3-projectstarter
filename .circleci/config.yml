@@ -259,7 +259,7 @@ jobs:
             # ---
             cd backend
             npm install
-            npm i @nestjs
+            npm i --save @nestjs/core @nestjs/common @nestjs/microservices @nestjs/typeorm @nestjs/swagger @nestjs/platform-express
             npm audit fix --audit-level=critical --force
             npm run build
             npm run migrations >> migration.log
