@@ -285,7 +285,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             pip3 install awscli
+             apt install awscli
              cd frontend
              npm install webpack-dev-server -g
              npm install
@@ -333,7 +333,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-           pip3 install --upgrade pip && pip3 install awscli
+            sudo apt install awscli
             cd backend
             npm i --save
             npm run build
@@ -346,7 +346,7 @@ jobs:
           name: Deploy backend
           command: |
             cd /home
-
+            echo "${PATH//:/$'\n'}"
             tar czf backend.tar.gz -P ./home/circleci/project/backend/dist
       # Here's where you will add some code to rollback on failure  
       - run:
