@@ -51,9 +51,9 @@ jobs:
           name: Build front-end
           command: |
              cd frontend
-             npm install
-             npm update
-             npm audit fix
+             npm install --save
+             npm update --save
+             npm audit fix 
              npm run build
       - save_cache:
           paths: [frontend/node_modules]
