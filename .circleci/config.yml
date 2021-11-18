@@ -285,7 +285,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apt install awscli
+             apt-get install sudo -y
+             sudo apt install awscli
              cd frontend
              npm install webpack-dev-server -g
              npm install
@@ -333,6 +334,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+           
             sudo apt install awscli
             cd backend
             npm i --save
