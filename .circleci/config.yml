@@ -285,7 +285,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
+             pip3 install awscli
              cd frontend
              npm install webpack-dev-server -g
              npm install
@@ -334,7 +334,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            
+            apt-get install npm
             cd backend
             npm i --save
             npm run build
