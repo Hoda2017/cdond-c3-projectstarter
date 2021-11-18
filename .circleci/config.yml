@@ -344,15 +344,9 @@ jobs:
       - restore_cache:
           keys: ["backend-dist"]  
 
+           # Here's where you will add some code to rollback on failure  
       - run:
-          name: Deploy backend
-          command: |
-            cd /home
-            echo "${PATH//:/$'\n'}"
-            tar czf backend.tar.gz -P ./home/circleci/project/backend/dist
-      # Here's where you will add some code to rollback on failure  
-      - run:
-          name: Deploy backend 2
+          name: Deploy backend 
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook \
