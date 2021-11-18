@@ -71,8 +71,12 @@ jobs:
           name: Back-end build
           command: |
               cd backend
-              npm i
-              npm update
+              npm i --save
+              npm update --save
+              npm i @nestjs/common --save
+              npm i  @nestjs/core --save
+              npm i @hapi/joi --save
+              npm i @nestjs/cqrs --save
               npm audit fix
               npm run build
       - persist_to_workspace:
