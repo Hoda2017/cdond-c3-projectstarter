@@ -285,10 +285,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            
              cd frontend
-             npm install webpack-dev-server -g
-             npm install
+             sudo npm install webpack-dev-server -g
+             sudo npm install
+             sudo apt-get update
+             sudo apt-get install awscli
       - run:
           name: Get backend url
           command: |
@@ -313,7 +314,7 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-             apt install awscli
+            
              cd frontend 
              aws s3 cp --recursive ./dist "s3://udapeople-<< pipeline.parameters.workflow-id >>"
       - revert-migrations
@@ -332,8 +333,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-           
-            apt install awscli
+            sudo apt-get update
+            sudo apt-get install awscli
             cd backend
             npm i --save
             npm run build
