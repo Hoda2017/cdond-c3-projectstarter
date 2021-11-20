@@ -423,8 +423,8 @@ jobs:
       - run:
           name: Save old workflow ID
           command: |
-            OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name=='CircleCI-WorkflowID'].Value" --output text)
-            echo OLD_CIRCLE_WORKFLOW_ID=${OLD_CIRCLE_WORKFLOW_ID}
+            OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name=='CIRCLE_WORKFLOW_ID'].Value" --output text)
+            echo OLD_CIRCLE_WORKFLOW_ID=${OldWorkflowID}
             curl -H "Content-Type: text/plain" \
               -H "token: << pipeline.parameters.memstash-token >>" \
               --request PUT --data $OldWorkflowID \
