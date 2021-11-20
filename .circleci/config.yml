@@ -423,13 +423,12 @@ jobs:
       - run:
           name: Save old workflow ID
           command: |
+            aws cloudformation list-exports --query "Exports[?Name=='WorkflowID'].Value" --output text
             export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name=='WorkflowID'].Value" --output text)
             echo OldWorkflowID
             echo OLD_CIRCLE_WORKFLOW_ID=${OldWorkflowID}
             curl -H "Content-Type: text/plain" \
-              -H "token: << pipeline.parameters.memstash-token >>" \
-              --request PUT --data $OldWorkflowID \
-              https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID}
+              -H "token: << pipeline.parameters.memstash-token >>"   --request PUT --data $OldWorkflowID  https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID}
       - run:
           name: Update cloudfront distribution
           command: |
