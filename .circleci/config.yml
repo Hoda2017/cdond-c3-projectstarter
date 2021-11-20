@@ -293,6 +293,7 @@ jobs:
              npm install webpack-dev-server -g
              npm install
              apk add bash
+             apk add --no-cache curl
             
       - run:
           name: Get backend url
