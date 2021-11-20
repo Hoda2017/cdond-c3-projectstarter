@@ -172,6 +172,7 @@ jobs:
       - run:
           name: save the new back-end url to memory using memstach
           command: |
+          
             backend_url=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -181,6 +182,8 @@ jobs:
             --request PUT \
             --data "http://${backend_url}:3030" \
             https://api.memstash.io/values/backend_url
+
+            echo  "http://${backend_url}:3030"
 
       - persist_to_workspace:
           root: ~/
@@ -294,7 +297,8 @@ jobs:
       - run:
           name: Get backend url
           command: |
-
+            export backendAPI=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url
+            echo ${backendAPI} 
             export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo ENVIRONMENT=production >> "frontend/.env"
@@ -302,7 +306,7 @@ jobs:
             echo API_URL=$API_URL >> "frontend/.env"
             echo $API_URL
             echo "${API_URL}"
-            echo BACKEND_IP
+            echo ${BACKEND_IP}
 
       - run:
           name: Build frontend
