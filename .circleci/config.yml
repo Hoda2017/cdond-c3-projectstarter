@@ -293,21 +293,19 @@ jobs:
              npm install webpack-dev-server -g
              npm install
              apk add bash
-             apk add --no-cache curl
             
       - run:
           name: Get backend url
           command: |
             export backendAPI=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
             echo ${backendAPI} 
-            export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
-            export API_URL="http://${BACKEND_IP}:3030"
+            export API_URL="${backendAPI}:3030"
             echo ENVIRONMENT=production >> "frontend/.env"
             echo NODE_ENV=production >> "frontend/.env"
             echo API_URL=$API_URL >> "frontend/.env"
             echo $API_URL
             echo "${API_URL}"
-            echo ${BACKEND_IP}
+         
 
       - run:
           name: Build frontend
@@ -324,8 +322,6 @@ jobs:
            
              cd frontend 
              aws s3 cp --recursive ./dist "s3://udapeople-<< pipeline.parameters.workflow-id >>"
-      
-      - destroy-environment    
       - slack/status    
                 
   deploy-backend:
@@ -365,8 +361,7 @@ jobs:
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
             
-      - revert-migrations
-      - destroy-environment
+    
       - slack/status
   smoke-test:
     docker:
@@ -385,12 +380,13 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_URL=$(sed -n 2p .circleci/ansible/inventory.txt)
+            export BACKEND_URL=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
       - run:
           name: Backend smoke test.
           command: |
            echo ${BACKEND_URL}
-            if curl -s https://${BACKEND_URL}:3030/api/status
+            curl -s ${BACKEND_URL}:3030/api/status
+            if curl -s ${BACKEND_URL}:3030/api/status
             then
             return 1
             else
@@ -401,6 +397,7 @@ jobs:
           command: |
             URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-us-east-2.amazonaws.com"
             echo $URL
+            curl -s ${URL} 
             if curl -s ${URL} 
             then
             return 1
@@ -413,8 +410,7 @@ jobs:
           when: on_fail
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
-      - revert-migrations
-      - destroy-environment 
+      
       - slack/status
   cloudfront-update:
     docker:
@@ -441,8 +437,7 @@ jobs:
               --stack-name "udapeople-cloudfront" \
               --parameter-overrides WorkflowID="<< pipeline.parameters.workflow-id >>" \
               --tags project=udapeople
-      - revert-migrations
-      - destroy-environment
+    
       - slack/status
   cleanup:
     docker:
