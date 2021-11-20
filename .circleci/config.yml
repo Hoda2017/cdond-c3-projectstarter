@@ -270,7 +270,7 @@ jobs:
               -H "token: << pipeline.parameters.memstash-token >>" \
               --request PUT --data "1" \
               https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
-      - revert-migrations
+     
       - destroy-environment
 
   deploy-frontend:
@@ -319,7 +319,7 @@ jobs:
            
              cd frontend 
              aws s3 cp --recursive ./dist "s3://udapeople-<< pipeline.parameters.workflow-id >>"
-      - revert-migrations
+      
       - destroy-environment    
       - slack/status    
                 
@@ -394,7 +394,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-eu-west-3.amazonaws.com"
+            URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-us-east-2.amazonaws.com"
             echo $URL
             if curl -s ${URL} 
             then
