@@ -425,7 +425,7 @@ jobs:
       - run:
           name: Save old workflow ID
           command: |
-            aws cloudformation list-exports --query Exports[?Name=="WorkflowID"].Value --output text
+           echo $(aws cloudformation list-exports --query Exports[?Name=="WorkflowID"].Value --output text)
             
       - run:
           name: Update cloudfront distribution
