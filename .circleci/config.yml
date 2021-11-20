@@ -297,7 +297,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export backendAPI=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url
+            export backendAPI=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
             echo ${backendAPI} 
             export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
