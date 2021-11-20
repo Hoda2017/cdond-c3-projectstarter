@@ -394,7 +394,7 @@ jobs:
           command: |
             URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-eu-west-3.amazonaws.com"
             echo $URL
-            if curl -s ${URL} | grep "Welcome"
+            if curl -s ${URL} 
             then
             return 0
             else
