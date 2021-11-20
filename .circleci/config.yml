@@ -272,8 +272,7 @@ jobs:
               https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
       - revert-migrations
       - destroy-environment
-     # Here's where you will add some code to rollback on failure      
-      - slack/status
+
   deploy-frontend:
     docker:
         - image: python:3.7-alpine3.11
@@ -290,6 +289,7 @@ jobs:
              cd frontend
              npm install webpack-dev-server -g
              npm install
+             apk add bash
             
       - run:
           name: Get backend url
@@ -340,6 +340,7 @@ jobs:
             cd backend
             npm i --save
             npm run build
+            apk add bash
             apk add --update ansible openssh-client tar gzip 
 
       - restore_cache:
