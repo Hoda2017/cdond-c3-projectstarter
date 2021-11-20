@@ -397,8 +397,8 @@ jobs:
           name: Frontend smoke test.
           command: |
             URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-us-east-2.amazonaws.com"
-            echo $URL
-            curl -s ${URL} 
+            echo ${URL}
+            echo curl -s ${URL} 
             if curl -s ${URL} 
             then
             return 0
