@@ -420,6 +420,8 @@ jobs:
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
             apk add --update curl
+            apk add bash
+            apk add --update nodejs npm
       - run:
           name: Save old workflow ID
           command: |
