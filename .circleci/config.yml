@@ -378,14 +378,10 @@ jobs:
           at: ~/      
      
       - run:
-          name: Get backend url
+          name: Backend smoke test.
           command: |
             export BACKEND_URL=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
             echo ${BACKEND_URL}
-      - run:
-          name: Backend smoke test.
-          command: |
-           echo ${BACKEND_URL}
             curl -s ${BACKEND_URL}:3030/api/status
             if curl -s ${BACKEND_URL}:3030/api/status
             then
