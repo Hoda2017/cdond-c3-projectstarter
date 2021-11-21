@@ -426,7 +426,7 @@ jobs:
       - run:
           name: Save old workflow ID
           command: |
-            echo $(aws cloudformation list-exports) 
+            echo $(aws s3 ls) 
             export OldWorkflowID= $(aws cloudformation list-exports  --query "Exports[?Name=='WorkflowID'].Value"   --no-paginate --output text)
             echo "Old Workflow ID: ${OldWorkflowID}"
             curl -H "Content-Type: text/plain" \
