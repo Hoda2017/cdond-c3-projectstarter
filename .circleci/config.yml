@@ -375,6 +375,7 @@ jobs:
             pip3 install awscli
             apk add --update nodejs npm
             apk add --update curl
+            apk add --no-cache --upgrade bash
       - attach_workspace:
           at: ~/      
      
