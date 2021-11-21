@@ -290,7 +290,8 @@ jobs:
              cd frontend
              npm install webpack-dev-server -g
              npm install
-            
+             apk add bash
+
       - run:
           name: Get backend url
           command: |
@@ -340,6 +341,7 @@ jobs:
             cd backend
             npm i --save
             npm run build
+            apk add bash
             apk add --update ansible openssh-client tar gzip 
 
       - restore_cache:
