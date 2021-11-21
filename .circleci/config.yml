@@ -434,17 +434,17 @@ jobs:
               -H "token: << pipeline.parameters.memstash-token >>" \
               --request PUT --data $OldWorkflowID \
               https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID}
-      # - run:
-      #     name: Update cloudfront distribution
-      #     command: |
-      #       aws cloudformation deploy \
-      #         --template-file .circleci/files/cloudfront.yml \
-      #         --stack-name "udapeople-cloudfront" \
-      #         --parameter-overrides WorkflowID="<< pipeline.parameters.workflow-id >>" \
-      #         --tags project=udapeople
-      # - revert-migrations
-      # - destroy-environment
-      # - slack/status
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name "udapeople-cloudfront" \
+              --parameter-overrides WorkflowID="<< pipeline.parameters.workflow-id >>" \
+              --tags project=udapeople
+      - revert-migrations
+      - destroy-environment
+      - slack/status
   cleanup:
     docker:
         - image: amazon/aws-cli
@@ -470,30 +470,30 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
-      # - deploy-infrastructure:
-      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-         
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
-     - cloudfront-update 
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+     - build-frontend
+     - build-backend
+     - test-frontend:
+         requires: [build-frontend]
+     - test-backend:
+         requires: [build-backend]
+     - scan-backend:
+         requires: [build-backend]
+     - scan-frontend:
+         requires: [build-frontend]
+     - deploy-infrastructure:
+         requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      
+     - configure-infrastructure:
+         requires: [deploy-infrastructure]
+     - run-migrations:
+         requires: [configure-infrastructure]
+     - deploy-frontend:
+         requires: [run-migrations]
+     - deploy-backend:
+         requires: [run-migrations]
+     - smoke-test:
+         requires: [deploy-backend, deploy-frontend]
+     - cloudfront-update: 
+           requires: [smoke-test]
+     - cleanup:
+          requires: [cloudfront-update]
