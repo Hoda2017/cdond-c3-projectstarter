@@ -30,12 +30,13 @@ commands:
     steps:
       - run:
           name: Revert migrations
+          when: on_fail
           # Add when this will run
           command: |
             
             cd ~/project/backend
             npm install
-            #npm run migrations:revert
+            npm run migrations:revert
             
 orbs: 
     slack: circleci/slack@3.4.2         
@@ -391,6 +392,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
+            echo ${BACKEND_URL}
             if curl -s ${BACKEND_URL}/api/status
             then
             return 1
@@ -400,7 +402,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-eu-west-3.amazonaws.com"
+            URL="http://udapeople-<< pipeline.parameters.workflow-id >>.s3-website-us-east-2.amazonaws.com"
             echo $URL
             if curl -s ${URL} | grep "Welcome"
             then
