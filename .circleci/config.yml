@@ -428,6 +428,7 @@ jobs:
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
             apk add --update curl
+            apk add --no-cache --upgrade bash
       - run:
           name: Save old workflow ID
           command: |
