@@ -35,7 +35,7 @@ commands:
             
             cd ~/project/backend
             npm install
-            npm run migrations:revert
+            #npm run migrations:revert
             
 orbs: 
     slack: circleci/slack@3.4.2         
