@@ -169,13 +169,12 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            backend_url=$(aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --output text)
-              echo "[web]" >> .circleci/ansible/inventory.txt
+              backend_url=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text)
               echo ${backend_url} >> .circleci/ansible/inventory.txt
-             more .circleci/ansible/inventory.txt
+              cat .circleci/ansible/inventory.txt
 
       - run:
           name: save the new back-end url to memory using memstach
@@ -233,6 +232,7 @@ jobs:
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
               cd .circleci/ansible
+              cat inventory.txt 
               ansible-playbook -i inventory.txt configure-server.yml
       #  rollback on failure  
       - run:
