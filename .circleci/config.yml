@@ -442,11 +442,8 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-            aws cloudformation deploy \
-              --template-file .circleci/files/cloudfront.yml \
-              --stack-name "udapeople-cloudfront" \
-              --parameter-overrides WorkflowID="<< pipeline.parameters.workflow-id >>" \
-              --tags project=udapeople
+             aws cloudformation deploy --template-file .circleci/files/cloudfront.yml  --stack-name udapeople --parameter-overrides WorkflowID="<< pipeline.parameters.workflow-id >>"
+           
       - revert-migrations
       - destroy-environment
       - slack/status
