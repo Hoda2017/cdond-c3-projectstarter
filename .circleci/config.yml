@@ -203,7 +203,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["c8:ea:1b:66:d6:64:08:5a:41:b6:5f:d2:5a:c9:80:42"]
+          fingerprints: ["5a:84:cc:95:7e:1c:53:b4:8e:e1:29:ea:07:27:f0:c6:e4:fb:75:56"]
       # Add ssh keys with fingerprint
       - attach_workspace:
           at: ~/
@@ -339,7 +339,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["c8:ea:1b:66:d6:64:08:5a:41:b6:5f:d2:5a:c9:80:42"]
+          fingerprints: ["5a:84:cc:95:7e:1c:53:b4:8e:e1:29:ea:07:27:f0:c6:e4:fb:75:56"]
       - attach_workspace:
           at: ~/
   
