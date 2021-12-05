@@ -236,7 +236,7 @@ jobs:
               cd .circleci/ansible
               cat inventory.txt 
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
-              ansible-playbook -i inventory.txt configure-server.yml
+            # ansible-playbook -i inventory.txt configure-server.yml
       #  rollback on failure  
       - run:
           name: Install AWS CLI for rollback
