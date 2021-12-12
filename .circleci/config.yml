@@ -235,8 +235,9 @@ jobs:
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
               cd .circleci/ansible
               cat inventory.txt 
-            #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
-            # ansible-playbook -i inventory.txt configure-server.yml
+              ansible-playbook -i inventory.txt configure-server.yml
+         #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+              
       #  rollback on failure  
       - run:
           name: Install AWS CLI for rollback
