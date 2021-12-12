@@ -235,14 +235,15 @@ jobs:
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
               cd .circleci/ansible
               cat inventory.txt 
-              ansible-playbook -i inventory.txt configure-server.yml
+            #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+            # ansible-playbook -i inventory.txt configure-server.yml
       #  rollback on failure  
       - run:
           name: Install AWS CLI for rollback
           when: on_fail
           command: |
             apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
-      - destroy-environment    
+     # - destroy-environment    
       - slack/status
 
   run-migrations:
@@ -502,16 +503,16 @@ workflows:
          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       
      - configure-infrastructure:
-         requires: [deploy-infrastructure]
+        requires: [deploy-infrastructure]
      - run-migrations:
-         requires: [configure-infrastructure]
+        requires: [configure-infrastructure]
      - deploy-frontend:
-         requires: [run-migrations]
+        requires: [run-migrations]
      - deploy-backend:
-         requires: [run-migrations]
+        requires: [run-migrations]
      - smoke-test:
-         requires: [deploy-backend, deploy-frontend]
+        requires: [deploy-backend, deploy-frontend]
      - cloudfront-update: 
-           requires: [smoke-test]
+          requires: [smoke-test]
      - cleanup:
-          requires: [cloudfront-update]
+        requires: [cloudfront-update]
