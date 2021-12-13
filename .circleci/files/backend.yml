@@ -1,20 +1,10 @@
-Parameters:
-  myVPC:
-      Description: VPC used to deploy our resources below
-      Type: AWS::EC2::VPC::Id
-  PublicSubnet:
-      Description: Subnet to be used for our Web Server
-      Type: AWS::EC2::Subnet::Id
-  AMItoUse:
-      Description: AMI to use for our base image
-      Type: String
+
 Resources:
   myWebAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
         GroupDescription: Allow http to our test host
-        VpcId:
-          Ref: myVPC
+        VpcId: vpc-0f4b06fd712ed9e8b
         SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -33,14 +23,13 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t3.micro
-      ImageId: !Ref AMItoUse
+      ImageId: ami-002068ed284fb165b
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           GroupSet: 
             - Ref: "myWebAccessSecurityGroup"
-          SubnetId: 
-            Ref: "PublicSubnet"
+          SubnetId:  subnet-05a74a22a1f5cf815
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
