@@ -1,59 +1,43 @@
-Description: >
-  UdaPeople backend stack.
-
 Parameters:
-  ID:
-    Description: Unique identifier.
-    Type: String
-
+  myVPC:
+      Description: VPC used to deploy our resources below
+      Type: AWS::EC2::VPC::Id
+  PublicSubnet:
+      Description: Subnet to be used for our Web Server
+      Type: AWS::EC2::Subnet::Id
+  AMItoUse:
+      Description: AMI to use for our base image
+      Type: String
 Resources:
-  InstanceSecurityGroup:
+  myWebAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Sub UdaPeople-${ID}
-      GroupDescription: Allow port 22 and port 3030.
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 3030
-          ToPort: 3030
-          CidrIp: 0.0.0.0/0
+        GroupDescription: Allow http to our test host
+        VpcId: vpc-0f4b06fd712ed9e8b
+        SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-
-  EC2Instance:
+        SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 30
+          ToPort: 30
+          CidrIp: 0.0.0.0/0
+  myWebServerInstance: 
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
-
+      InstanceType: t3.micro
+      ImageId: ami-002068ed284fb165b
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           GroupSet: 
-            - Ref: "InstanceSecurityGroup"
-          
-      KeyName: udapeopleprod # If you use another key pair name, you should change this value to match.
-      # If this ami id is not available for you, you can find another (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
-      # Ubuntu 18 or higher works fine
-      ImageId: ami-0629230e074c580f2
-      Tags:
-        - Key: Name
-          Value: !Sub backend-${ID}
+            - Ref: "myWebAccessSecurityGroup"
+          SubnetId: subnet-05a74a22a1f5cf815
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
           yum update -y
           yum install -y httpd
           systemctl start httpd
-          apk add --no-cache curl
-          apk add --no-cache --upgrade bash
-          apk add --no-cache --update ansible
-          apk add --no-cache openssh-client
-          pip3 install awscli
-          apk add --update ansible
-              
