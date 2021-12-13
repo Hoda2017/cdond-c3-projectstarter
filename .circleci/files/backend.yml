@@ -32,6 +32,7 @@ Resources:
     Properties:
       InstanceType: t3.micro
       ImageId: ami-002068ed284fb165b
+      KeyName: udapeopleprod
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
