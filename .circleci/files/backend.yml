@@ -31,8 +31,8 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t3.micro
-      ImageId: ami-002068ed284fb165b
-      KeyName: udapeopleprod
+      ImageId: ami-0fb653ca2d3203ac1
+      KeyName: udapeople
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
