@@ -235,7 +235,7 @@ jobs:
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
               cd .circleci/ansible
               cat inventory.txt 
-           # ansible-playbook -i inventory.txt configure-server.yml
+              ansible-playbook -i inventory.txt configure-server.yml
          #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
               
       #  rollback on failure  
@@ -365,9 +365,9 @@ jobs:
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False    
             more .circleci/ansible/inventory.txt
-          # ansible-playbook \
-          #   -i .circleci/ansible/inventory.txt \
-          #   .circleci/ansible/deploy-backend.yml
+            ansible-playbook \
+              -i .circleci/ansible/inventory.txt \
+              .circleci/ansible/deploy-backend.yml
 
       
       - run:
