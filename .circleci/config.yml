@@ -363,12 +363,13 @@ jobs:
       - run:
           name: Deploy backend 
           command: |
-            export ANSIBLE_HOST_KEY_CHECKING=False
-            ansible-playbook \
-              -i .circleci/ansible/inventory.txt \
-              .circleci/ansible/deploy-backend.yml
+            export ANSIBLE_HOST_KEY_CHECKING=False    
+            more .circleci/ansible/inventory.txt
+          # ansible-playbook \
+          #   -i .circleci/ansible/inventory.txt \
+          #   .circleci/ansible/deploy-backend.yml
 
-              more .circleci/ansible/inventory.txt
+      
       - run:
           name: Install AWS CLI for rollback
           when: on_fail
