@@ -5,6 +5,7 @@
     sudo apt install -y nodejs
     echo $PWD 
 
+
 - name: "install pm2"
   become: true
   npm:
@@ -13,10 +14,69 @@
     production: yes
     state: present
 
-- name: "copy files from CircleCI to server"
+- name: "copy files from CircleCI to server src"
   copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
+    src: /root/project/backend/src
+    dest: /home/ubuntu/backend
+
+- name: "copy files from CircleCI to server test"
+  copy:
+    src: /root/project/backend/test
+    dest: /home/ubuntu/backend    
+
+- name: "copy files from CircleCI to server .env"
+  copy:
+    src: /root/project/backend/.env
+    dest: /home/ubuntu/backend  
+
+- name: "copy files from CircleCI to server .nestcli.json"
+  copy:
+    src: /root/project/backend/.nestcli.json
+    dest: /home/ubuntu/backend
+- name: "copy files from CircleCI to server npmignore"
+  copy:
+    src: /root/project/backend/.npmignore
+    dest: /home/ubuntu/backend
+
+- name: "copy files from CircleCI to server prettierrc"
+  copy:
+    src: /root/project/backend/.prettierrc
+    dest: /home/ubuntu/backend
+
+- name: "copy files from CircleCI to server development.env"
+  copy:
+    src: /root/project/backend/development.env
+    dest: /home/ubuntu/backend  
+
+- name: "copy files from CircleCI to server nodemon-debug.json  "
+  copy:
+    src: /root/project/backend/nodemon-debug.json  
+    dest: /home/ubuntu/backend
+- name: "copy files from CircleCI to server package-lock.json  "
+  copy:
+    src: /root/project/backend/package-lock.json  
+    dest: /home/ubuntu/backend
+
+- name: "copy files from CircleCI to server tsconfig.json "
+  copy:
+    src: /root/project/backend/package.json  
+    dest: /home/ubuntu/backend  
+
+- name: "copy files from CircleCI to server tsconfig.json "
+  copy:
+    src: /root/project/backend/tsconfig.json 
+    dest: /home/ubuntu/backend 
+
+- name: "copy files from CircleCI to server tsconfig.spec.json"
+  copy:
+    src: /root/project/backend/tsconfig.spec.json
+    dest: /home/ubuntu/backend  
+
+- name: "copy files from CircleCI to server webpack.config.js"
+  copy:
+    src: /root/project/backend/webpack.config.js
+    dest: /home/ubuntu/backend                      
+                                  
 
 - name: "install package dependencies"
   shell: |
