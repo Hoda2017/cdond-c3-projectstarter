@@ -236,6 +236,7 @@ jobs:
               cd .circleci/ansible
               cat inventory.txt 
               export ANSIBLE_HOST_KEY_CHECKING=False
+              echo $PWD
               ansible-playbook -i inventory.txt configure-server.yml
          #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
               
