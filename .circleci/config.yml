@@ -237,7 +237,7 @@ jobs:
               cat inventory.txt 
               export ANSIBLE_HOST_KEY_CHECKING=False
               echo $PWD
-              ansible-playbook -i inventory.txt configure-server.yml
+               timeout 50m ansible-playbook -i inventory.txt configure-server.yml
          #  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
               
       #  rollback on failure  
