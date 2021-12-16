@@ -496,6 +496,7 @@ workflows:
 
      - build-frontend
      - deploy-frontend
+         requires:[build-frontend]
     #  - build-backend
     #  - test-frontend:
     #      requires: [build-frontend]
