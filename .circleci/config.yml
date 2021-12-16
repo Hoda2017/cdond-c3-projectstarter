@@ -493,10 +493,9 @@ jobs:
 workflows:
   default:
     jobs:
-
      - build-frontend
-     - deploy-frontend
-         requires:[build-frontend]
+     - deploy-frontend:   
+         requires: [build-frontend]
     #  - build-backend
     #  - test-frontend:
     #      requires: [build-frontend]
