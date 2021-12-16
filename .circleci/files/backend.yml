@@ -1,50 +1,40 @@
+Description: >
+  UdaPeople backend stack.
 Parameters:
   ID:
     Description: Unique identifier.
     Type: String
+
 Resources:
-  myWebAccessSecurityGroup:
+  InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-        GroupName: !Sub UdaPeople-${ID}
-        GroupDescription: Allow http to our test host
-        VpcId: vpc-0f4b06fd712ed9e8b
-        SecurityGroupIngress:
+      GroupName: !Sub UdaPeople-${ID}
+      GroupDescription: Allow port 22 and port 3030.
+      SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
-          FromPort: 30
-          ToPort: 30
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-        SecurityGroupEgress:
-        - IpProtocol: -1
-          FromPort: -1
-          ToPort: -1
+        - IpProtocol: tcp
+          FromPort: 3030
+          ToPort: 3030
           CidrIp: 0.0.0.0/0
-  myWebServerInstance: 
+
+  EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t3.micro
-      ImageId: ami-0fb653ca2d3203ac1
-      KeyName: udapeople
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
-          GroupSet: 
-            - Ref: "myWebAccessSecurityGroup"
-          SubnetId:  subnet-05a74a22a1f5cf815
+      InstanceType: t2.micro
+      SecurityGroups:
+        - Ref: InstanceSecurityGroup
+      KeyName: udapeople # If you use another key pair name, you should change this value to match.
+      # If this ami id is not available for you, you can find another (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
+      # Ubuntu 18 or higher works fine
+      ImageId: ami-0fb653ca2d3203ac1 
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          yum update -y
-          yum install -y httpd
-          systemctl start httpd
