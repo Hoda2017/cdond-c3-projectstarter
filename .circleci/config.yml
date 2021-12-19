@@ -475,7 +475,7 @@ jobs:
           command: |
               if [ "${OldWorkflowID}" != "<< pipeline.parameters.workflow-id >>" ]
               then
-                if aws s3api head-bucket --bucket udapeople-s3bucket-${OldWorkflowID}
+                if aws s3api head-bucket --bucket udapeople-${OldWorkflowID}
                 then
                 aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
                 fi
