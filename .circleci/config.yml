@@ -44,6 +44,25 @@ commands:
 orbs: 
     slack: circleci/slack@3.4.2         
 jobs:
+
+  set-param:
+     docker:
+        - image: circleci/node:13.8.0
+     steps:
+        - checkout
+        - run:
+            name: Build front-end
+            command: |
+               export  backendurl="test"
+  get-param:
+     docker:
+        - image: circleci/node:13.8.0
+     steps:
+        - checkout
+        - run:
+         
+            command: |
+               echo   ${backendurl}
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -502,30 +521,33 @@ jobs:
 workflows:
   default:
     jobs:    
-     - build-frontend
-     - build-backend
-     - test-frontend:
-         requires: [build-frontend]
-     - test-backend:
-         requires: [build-backend]
-     - scan-backend:
-         requires: [build-backend]
-     - scan-frontend:
-         requires: [build-frontend]
-     - deploy-infrastructure:
-         requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+       -  set-param
+       -  get-param:
+              requires: [set-param]
+    #  - build-frontend
+    #  - build-backend
+    #  - test-frontend:
+    #      requires: [build-frontend]
+    #  - test-backend:
+    #      requires: [build-backend]
+    #  - scan-backend:
+    #      requires: [build-backend]
+    #  - scan-frontend:
+    #      requires: [build-frontend]
+    #  - deploy-infrastructure:
+    #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
 
-     - configure-infrastructure:
-        requires: [deploy-infrastructure]
-     - run-migrations:
-        requires: [configure-infrastructure]
-     - deploy-frontend:
-        requires: [run-migrations]
-     - deploy-backend:
-        requires: [run-migrations]
-     - smoke-test:
-        requires: [deploy-backend, deploy-frontend]
-     - cloudfront-update: 
-          requires: [smoke-test]
-     - cleanup:
-        requires: [cloudfront-update]
+    #  - configure-infrastructure:
+    #     requires: [deploy-infrastructure]
+    #  - run-migrations:
+    #     requires: [configure-infrastructure]
+    #  - deploy-frontend:
+    #     requires: [run-migrations]
+    #  - deploy-backend:
+    #     requires: [run-migrations]
+    #  - smoke-test:
+    #     requires: [deploy-backend, deploy-frontend]
+    #  - cloudfront-update: 
+    #       requires: [smoke-test]
+    #  - cleanup:
+    #     requires: [cloudfront-update]
