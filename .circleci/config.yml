@@ -51,7 +51,7 @@ jobs:
    steps:
         - run:
             command: |
-                   ${{pipeline.parameters.backend-url}} : "test"
+                echo  test >  ${{pipeline.parameters.backend-url}} 
     
   get-param:
     docker:
