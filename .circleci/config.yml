@@ -49,15 +49,17 @@ jobs:
    docker:
       - image: circleci/node:13.8.0
    steps:
-     - ${{pipeline.parameters.backend-url}}: "tesssst"   
-
+        - run:
+            command: |
+                   ${{pipeline.parameters.backend-url}}  = "test"
+    
   get-param:
     docker:
         - image: circleci/node:13.8.0
     steps:
       - run:
           command: |
-              echo  ${{pipeline.parameters.backend-url}}  
+              echo   ${{pipeline.parameters.backend-url}}  
 
   build-frontend:
     docker:
