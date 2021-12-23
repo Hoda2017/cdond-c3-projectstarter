@@ -181,7 +181,7 @@ jobs:
               
               echo ${backend_url} >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
-               echo ${backend_url} >> .circleci/ansible/backend-url.txt
+               echo ${backend_url} >> backend-url.txt
       # - run:
       #     name: save the new back-end url to memory using memstach
       #     command: |
@@ -194,11 +194,16 @@ jobs:
       #       --request PUT \
       #       --data "http://${backend_url}:3030" \
       #       https://api.memstash.io/values/backend_url
-
+    
+    
       - persist_to_workspace:
           root: ~/
           paths:
+            - project/backend-url.txt
             - project/.circleci/ansible/inventory.txt
+      - save_cache:
+              paths: [project/backend-url.txt]
+              key: backend-url      
       - destroy-environment
       - slack/status      
 
@@ -301,7 +306,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/
-      
+      - restore_cache:
+          keys: ["backend-url"]
       - run:
           name: Install dependencies
           command: |
@@ -317,7 +323,7 @@ jobs:
           name: Get backend url
           command: |
 
-            export API_URL=$(cat  .circleci/ansible/backend-url.txt)
+            export API_URL=$(cat  backend-url.txt)
             echo ENVIRONMENT=production >> "frontend/.env"
             echo NODE_ENV=production >> "frontend/.env"
             echo API_URL=$API_URL >> "frontend/.env"
@@ -402,11 +408,13 @@ jobs:
             apk add --no-cache --upgrade bash
       - attach_workspace:
           at: ~/      
-     
+      - restore_cache:
+            keys: [backend-url]
+
       - run:
           name: Get backend url
           command: |
-            export BACKEND_URL=$(cat  .circleci/ansible/backend-url.txt)
+            export BACKEND_URL=$(cat  backend-url.txt)
             echo ${BACKEND_URL}
          # export BACKEND_URL=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
       - run:
@@ -457,11 +465,18 @@ jobs:
             OldWorkflowID="$(aws cloudformation list-exports  --query "Exports[?Name=='WorkflowID'].Value"   --no-paginate --output text)"
           
             echo "Old Workflow ID: ${OldWorkflowID}"
-            echo  >> .circleci/ansible/old_workflow_id.txt
+            echo  >> old_workflow_id.txt
      #  curl -H "Content-Type: text/plain" \
            #   -H "token: << pipeline.parameters.memstash-token >>" \
           #    --request PUT --data $OldWorkflowID \
             #  https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID}
+      - persist_to_workspace:
+            root: ~/
+            paths:
+            - project/old_workflow_id.txt
+      - save_cache:
+              paths: [project/old_workflow_id.txt]
+              key: old_workflow_id
       - run:
           name: Update cloudfront distribution
           command: |
@@ -473,10 +488,12 @@ jobs:
         - image: amazon/aws-cli
     steps:
       - checkout
+      - restore_cache:
+            keys: [old_workflow_id]
       - run:
           name: Get old stack workflow id
           command: |
-            export  OldWorkflowID=$(cat  .circleci/ansible/old_workflow_id.txt)
+            export  OldWorkflowID=$(cat  old_workflow_id.txt)
             echo "Old Workflow ID: ${OldWorkflowID}"
            # export OldWorkflowID=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID})
            
@@ -546,33 +563,30 @@ jobs:
 workflows:
   default:
     jobs:    
-     - set-value
-     - get-value:
-          requires: [set-value]
-    #  - build-frontend
-    #  - build-backend
-    #  - test-frontend:
-    #      requires: [build-frontend]
-    #  - test-backend:
-    #      requires: [build-backend]
-    #  - scan-backend:
-    #      requires: [build-backend]
-    #  - scan-frontend:
-    #      requires: [build-frontend]
-    #  - deploy-infrastructure:
-    #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+     - build-frontend
+     - build-backend
+     - test-frontend:
+         requires: [build-frontend]
+     - test-backend:
+         requires: [build-backend]
+     - scan-backend:
+         requires: [build-backend]
+     - scan-frontend:
+         requires: [build-frontend]
+     - deploy-infrastructure:
+         requires: [test-frontend, test-backend, scan-frontend, scan-backend]
 
-    #  - configure-infrastructure:
-    #     requires: [deploy-infrastructure]
-    #  - run-migrations:
-    #     requires: [configure-infrastructure]
-    #  - deploy-frontend:
-    #     requires: [run-migrations]
-    #  - deploy-backend:
-    #     requires: [run-migrations]
-    #  - smoke-test:
-    #     requires: [deploy-backend, deploy-frontend]
-    #  - cloudfront-update: 
-    #       requires: [smoke-test]
-    #  - cleanup:
-    #     requires: [cloudfront-update]
+     - configure-infrastructure:
+        requires: [deploy-infrastructure]
+     - run-migrations:
+        requires: [configure-infrastructure]
+     - deploy-frontend:
+        requires: [run-migrations]
+     - deploy-backend:
+        requires: [run-migrations]
+     - smoke-test:
+        requires: [deploy-backend, deploy-frontend]
+     - cloudfront-update: 
+          requires: [smoke-test]
+     - cleanup:
+        requires: [cloudfront-update]
