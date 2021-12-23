@@ -465,7 +465,7 @@ jobs:
             OldWorkflowID="$(aws cloudformation list-exports  --query "Exports[?Name=='WorkflowID'].Value"   --no-paginate --output text)"
           
             echo "Old Workflow ID: ${OldWorkflowID}"
-            echo ${OldWorkflowID} >> old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
+            echo ${OldWorkflowID} > old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
      #  curl -H "Content-Type: text/plain" \
            #   -H "token: << pipeline.parameters.memstash-token >>" \
           #    --request PUT --data $OldWorkflowID \
@@ -473,7 +473,8 @@ jobs:
       - persist_to_workspace:
             root: ~/
             paths:
-            - project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
+               - project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
+
       - save_cache:
               paths: ["project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt"]
               key: old_workflow_id
