@@ -526,7 +526,7 @@ jobs:
             name: Get old stack workflow id
             command: |   
            
-             sudo  cat /backend-url.txt            
+               cat /backend-url.txt            
 workflows:
   default:
     jobs:    
