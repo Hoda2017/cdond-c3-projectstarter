@@ -509,10 +509,15 @@ jobs:
             command: |   
              
               echo "test" > backend-url.txt
+         - save_cache:
+            paths: [backend-url.txt]
+            key: backend-url    
   get-value:
      docker:
         - image: amazon/aws-cli     
      steps:
+         - restore_cache:
+            keys: [backend-url.txt]
          - run:
             name: Get old stack workflow id
             command: |   
