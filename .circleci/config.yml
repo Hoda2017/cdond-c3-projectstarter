@@ -504,7 +504,7 @@ jobs:
      docker:
         - image: python:3.7-alpine3.11  
      steps:
-        
+         - checkout
          - run:
             name: Get old stack workflow id
             command: |   
@@ -533,14 +533,15 @@ jobs:
      docker:
         - image: python:3.7-alpine3.11    
      steps:
-         
+         - checkout
          - restore_cache:
             keys: [backend-url]
          - run:
             name: Get old stack workflow id
             command: |   
              
-               cat backend-url.txt  
+               export url=$(more backend-url.txt) 
+               echo ${url}
 
 workflows:
   default:
