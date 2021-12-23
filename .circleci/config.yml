@@ -502,7 +502,7 @@ jobs:
       - slack/status     
   set-value:
      docker:
-        - image: circleci/node:13.8.0    
+        - image: python:3.7-alpine3.11  
      steps:
          - run:
             name: Get old stack workflow id
@@ -520,7 +520,7 @@ jobs:
               
   get-value:
      docker:
-        - image: circleci/node:13.8.0    
+        - image: python:3.7-alpine3.11    
      steps:
          - restore_cache:
             keys: ["backend-url"]
