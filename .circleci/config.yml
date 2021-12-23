@@ -504,33 +504,32 @@ jobs:
      docker:
         - image: python:3.7-alpine3.11  
      steps:
-         - attach_workspace:
-              at: ~/tmp
+         - checkout
          - run:
             name: Get old stack workflow id
             command: |   
               echo $PWD 
               ls -a
-              echo "test" > backend-url.txt
+              echo "test" > .circleci/ansible/backend-url.txt
 
          - persist_to_workspace:
-            root: ~/  
+            root: ~/
             paths:
-                - tmp
-
+            - project/.circleci/ansible
             
+         - save_cache:
+              paths: [.circleci/ansible]
+              key: backend-url
+                
             
               
   get-value:
      docker:
         - image: python:3.7-alpine3.11    
      steps:
-         - attach_workspace:
-              at: ~/tmp
-         - persist_to_workspace:
-            root: ~/  
-            paths:
-                - tmp      
+         - checkout  
+         - restore_cache:
+            keys: [backend-url]
          - run:
             name: Get old stack workflow id
             command: |   
