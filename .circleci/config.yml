@@ -502,7 +502,7 @@ jobs:
       - slack/status     
   set-value:
      docker:
-        - image: amazon/aws-cli     
+        - image: circleci/node:13.8.0    
      steps:
          - run:
             name: Get old stack workflow id
@@ -514,7 +514,7 @@ jobs:
             key: backend-url    
   get-value:
      docker:
-        - image: amazon/aws-cli     
+        - image: circleci/node:13.8.0    
      steps:
          - restore_cache:
             keys: ["backend-url"]
