@@ -508,21 +508,21 @@ jobs:
             name: Get old stack workflow id
             command: |   
              
-              echo "test" > .circleci/ansible/backend-url.txt
-         - save_cache:
-            paths: [.circleci/ansible/backend-url.txt]
-            key: backend-url    
+              echo "test" > backend-url.txt
+        #  - save_cache:
+        #     paths: [.circleci/ansible/backend-url.txt]
+        #     key: backend-url    
   get-value:
      docker:
         - image: circleci/node:13.8.0    
      steps:
-         - restore_cache:
-            keys: ["backend-url"]
+        #  - restore_cache:
+        #     keys: ["backend-url"]
          - run:
             name: Get old stack workflow id
             command: |   
            
-             sudo  cat .circleci/ansible/backend-url.txt            
+             sudo  cat backend-url.txt            
 workflows:
   default:
     jobs:    
