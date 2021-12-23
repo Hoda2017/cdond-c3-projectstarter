@@ -517,7 +517,7 @@ jobs:
         - image: amazon/aws-cli     
      steps:
          - restore_cache:
-            keys: [backend-url]
+            keys: ["backend-url"]
          - run:
             name: Get old stack workflow id
             command: |   
