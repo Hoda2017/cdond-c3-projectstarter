@@ -181,7 +181,7 @@ jobs:
               
               echo ${backend_url} >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
-               echo ${backend_url} >> backend-url.txt
+               echo ${backend_url} >> backend-url-<< pipeline.parameters.workflow-id >>.txt
       # - run:
       #     name: save the new back-end url to memory using memstach
       #     command: |
@@ -199,10 +199,10 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/backend-url.txt
+            - project/backend-url-<< pipeline.parameters.workflow-id >>.txt
             - project/.circleci/ansible/inventory.txt
       - save_cache:
-              paths: [project/backend-url.txt]
+              paths: ["project/backend-url-<< pipeline.parameters.workflow-id >>.txt"]
               key: backend-url      
       - destroy-environment
       - slack/status      
@@ -465,7 +465,7 @@ jobs:
             OldWorkflowID="$(aws cloudformation list-exports  --query "Exports[?Name=='WorkflowID'].Value"   --no-paginate --output text)"
           
             echo "Old Workflow ID: ${OldWorkflowID}"
-            echo  >> old_workflow_id.txt
+            echo ${OldWorkflowID} >> old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
      #  curl -H "Content-Type: text/plain" \
            #   -H "token: << pipeline.parameters.memstash-token >>" \
           #    --request PUT --data $OldWorkflowID \
@@ -473,9 +473,9 @@ jobs:
       - persist_to_workspace:
             root: ~/
             paths:
-            - project/old_workflow_id.txt
+            - project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
       - save_cache:
-              paths: [project/old_workflow_id.txt]
+              paths: ["project/old_workflow_id- << pipeline.parameters.workflow-id >>.txt"]
               key: old_workflow_id
       - run:
           name: Update cloudfront distribution
