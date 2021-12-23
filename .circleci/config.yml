@@ -509,11 +509,14 @@ jobs:
          - run:
             name: Get old stack workflow id
             command: |   
-
-             
               echo "test" > backend-url.txt
-          
-        
+
+         - persist_to_workspace:
+            root: ~/  
+            paths:
+                - tmp
+
+            
             
               
   get-value:
@@ -522,11 +525,16 @@ jobs:
      steps:
          - attach_workspace:
               at: ~/tmp
+         - persist_to_workspace:
+            root: ~/  
+            paths:
+                - tmp      
          - run:
             name: Get old stack workflow id
             command: |   
            
-               cat backend-url.txt            
+               cat backend-url.txt  
+
 workflows:
   default:
     jobs:    
