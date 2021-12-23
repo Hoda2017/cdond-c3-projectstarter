@@ -323,7 +323,7 @@ jobs:
           name: Get backend url
           command: |
 
-            export API_URL=$(cat  backend-url.txt)
+            export API_URL=$(cat  backend-url-<< pipeline.parameters.workflow-id >>.txt)
             echo ENVIRONMENT=production >> "frontend/.env"
             echo NODE_ENV=production >> "frontend/.env"
             echo API_URL=$API_URL >> "frontend/.env"
@@ -414,7 +414,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_URL=$(cat  backend-url.txt)
+            export BACKEND_URL=$(cat  backend-url-<< pipeline.parameters.workflow-id >>.txt)
             echo ${BACKEND_URL}
          # export BACKEND_URL=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
       - run:
@@ -475,7 +475,7 @@ jobs:
             paths:
             - project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
       - save_cache:
-              paths: ["project/old_workflow_id- << pipeline.parameters.workflow-id >>.txt"]
+              paths: ["project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt"]
               key: old_workflow_id
       - run:
           name: Update cloudfront distribution
@@ -493,7 +493,7 @@ jobs:
       - run:
           name: Get old stack workflow id
           command: |
-            export  OldWorkflowID=$(cat  old_workflow_id.txt)
+            export  OldWorkflowID=$(cat  old_workflow_id-<< pipeline.parameters.workflow-id >>.txt)
             echo "Old Workflow ID: ${OldWorkflowID}"
            # export OldWorkflowID=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID})
            
