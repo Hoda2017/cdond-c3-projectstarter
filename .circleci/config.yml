@@ -536,7 +536,7 @@ jobs:
             command: |   
                echo $PWD
                ls -a
-               cat backend-url.txt  
+               cat tmp/backend-url.txt  
 
 workflows:
   default:
