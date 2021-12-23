@@ -510,7 +510,7 @@ jobs:
             command: |   
               echo $PWD 
               ls -a
-              echo "test" > .circleci/ansible/backend-url.txt
+              echo test > .circleci/ansible/backend-url.txt
 
          - persist_to_workspace:
             root: ~/
@@ -520,6 +520,12 @@ jobs:
          - save_cache:
               paths: [.circleci/ansible]
               key: backend-url
+         - run:
+            name: Get old stack workflow id
+            command: |   
+             
+              cat .circleci/ansible/backend-url.txt
+       
                 
             
               
