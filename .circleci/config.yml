@@ -505,11 +505,12 @@ jobs:
         - image: python:3.7-alpine3.11  
      steps:
          - attach_workspace:
-              at: ~/
+              at: ~/tmp
          - run:
             name: Get old stack workflow id
             command: |   
-              cd project/.circleci/ansible
+
+             
               echo "test" > backend-url.txt
           
         
@@ -520,11 +521,11 @@ jobs:
         - image: python:3.7-alpine3.11    
      steps:
          - attach_workspace:
-              at: ~/
+              at: ~/tmp
          - run:
             name: Get old stack workflow id
             command: |   
-             cd project/.circleci/ansible
+           
              sudo  cat /backend-url.txt            
 workflows:
   default:
