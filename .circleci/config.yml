@@ -509,6 +509,8 @@ jobs:
          - run:
             name: Get old stack workflow id
             command: |   
+              echo $PWD 
+              ls -a
               echo "test" > backend-url.txt
 
          - persist_to_workspace:
@@ -532,7 +534,8 @@ jobs:
          - run:
             name: Get old stack workflow id
             command: |   
-           
+               echo $PWD
+               ls -a
                cat backend-url.txt  
 
 workflows:
