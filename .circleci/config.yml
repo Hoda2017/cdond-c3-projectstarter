@@ -535,7 +535,8 @@ jobs:
             command: |   
                echo $PWD
                ls -a
-               cat tmp/backend-url.txt  
+               cd .circleci/ansible
+               cat backend-url.txt  
 
 workflows:
   default:
