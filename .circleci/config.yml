@@ -507,7 +507,7 @@ jobs:
          - run:
             name: Get old stack workflow id
             command: |   
-              cd .circleci\ansible
+              cd .circleci/ansible
               echo "test" > backend-url.txt
   get-value:
      docker:
@@ -516,7 +516,7 @@ jobs:
          - run:
             name: Get old stack workflow id
             command: |   
-             cd  .circleci\ansible
+             cd  .circleci/ansible
              cat backend-url.txt            
 workflows:
   default:
