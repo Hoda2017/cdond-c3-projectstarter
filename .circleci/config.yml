@@ -493,7 +493,7 @@ jobs:
           name: Remove old stacks and files
           command: |
               export  OldWorkflowID= << pipeline.parameters.old-workflow-id>>
-              echo OldWorkflowID
+              echo ${OldWorkflowID}
               if [ "${OldWorkflowID}" != "<< pipeline.parameters.workflow-id >>" ]
               then
                 if aws s3api head-bucket --bucket udapeople-${OldWorkflowID}
