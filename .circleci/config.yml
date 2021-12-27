@@ -482,16 +482,17 @@ jobs:
         - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Get old stack workflow id
-          command: |
-            export  OldWorkflowID= << pipeline.parameters.old-workflow-id>>
-            echo "Old Workflow ID: ${OldWorkflowID}"
+      # - run:
+      #     name: Get old stack workflow id
+      #     command: |
+      #       export  OldWorkflowID= << pipeline.parameters.old-workflow-id>>
+      #       echo "Old Workflow ID: ${OldWorkflowID}"
            # export OldWorkflowID=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID})
            
       - run:
           name: Remove old stacks and files
           command: |
+              export  OldWorkflowID= << pipeline.parameters.old-workflow-id>>
               if [ "${OldWorkflowID}" != "<< pipeline.parameters.workflow-id >>" ]
               then
                 if aws s3api head-bucket --bucket udapeople-${OldWorkflowID}
