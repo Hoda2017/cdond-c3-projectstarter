@@ -181,7 +181,7 @@ jobs:
               
               echo ${backend_url} >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
-               echo ${backend_url} >> backend-url-<< pipeline.parameters.workflow-id >>.txt
+               echo ${backend_url} >> backend-url-27-12.txt
       # - run:
       #     name: save the new back-end url to memory using memstach
       #     command: |
@@ -199,11 +199,11 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/backend-url-<< pipeline.parameters.workflow-id >>.txt
+            - project/backend-url-27-12.txt
             - project/.circleci/ansible/inventory.txt
       - save_cache:
-              paths: ["project/backend-url-<< pipeline.parameters.workflow-id >>.txt"]
-              key: backend-url-<< pipeline.parameters.workflow-id >>      
+              paths: ["project/backend-url-27-12.txt"]
+              key: backend-url-27-12      
       - destroy-environment
       - slack/status      
 
@@ -300,7 +300,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: [backend-url-<< pipeline.parameters.workflow-id >>]
+          keys: [backend-url-27-12]
       - run:
           name: Install dependencies
           command: |
@@ -316,7 +316,7 @@ jobs:
           name: Get backend url
           command: |
 
-            export API_URL=$(cat  backend-url-<< pipeline.parameters.workflow-id >>.txt)
+            export API_URL=$(cat  backend-url-27-12.txt)
             echo ENVIRONMENT=production >> "frontend/.env"
             echo NODE_ENV=production >> "frontend/.env"
             echo API_URL=$API_URL >> "frontend/.env"
@@ -402,12 +402,12 @@ jobs:
       - attach_workspace:
           at: ~/      
       - restore_cache:
-            keys: [backend-url-<< pipeline.parameters.workflow-id >>]
+            keys: [backend-url-27-12]
 
       - run:
           name: Get backend url
           command: |
-            export BACKEND_URL=$(cat  backend-url-<< pipeline.parameters.workflow-id >>.txt)
+            export BACKEND_URL=$(cat  backend-url-27-12.txt)
             echo ${BACKEND_URL}
          # export BACKEND_URL=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/backend_url)
       - run:
@@ -466,11 +466,11 @@ jobs:
       - persist_to_workspace:
             root: ~/
             paths:
-               - project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt
+               - project/old_workflow_id-12-27.txt
 
       - save_cache:
-              paths: ["project/old_workflow_id-<< pipeline.parameters.workflow-id >>.txt"]
-              key: old_workflow_id_<< pipeline.parameters.workflow-id >>
+              paths: ["project/old_workflow_id-12-27.txt"]
+              key: old_workflow_id_12-27
       - run:
           name: Update cloudfront distribution
           command: |
@@ -483,7 +483,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-            keys: [old_workflow_id_<< pipeline.parameters.workflow-id >>]
+            keys: [old_workflow_id_12-27]
       - run:
           name: Get old stack workflow id
           command: |
