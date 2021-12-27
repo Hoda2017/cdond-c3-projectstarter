@@ -9,7 +9,7 @@ parameters:
       default: "b9461c43-6888-4d04-8e76-7beeddbb863c"
   old-workflow-id:
       type: string
-      default: "udapeople-kk1j287dhjppmz1234"
+      default: "kk1j287dhjppmz1234"
 
 
 
@@ -181,7 +181,7 @@ jobs:
               
               echo ${backend_url} >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
-               echo ${backend_url} >> backend-url-27-12.txt
+               echo http://${backend_url}:3030 >> backend-url-27-12.txt
       # - run:
       #     name: save the new back-end url to memory using memstach
       #     command: |
@@ -463,14 +463,8 @@ jobs:
            #   -H "token: << pipeline.parameters.memstash-token >>" \
           #    --request PUT --data $OldWorkflowID \
             #  https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID}
-      - persist_to_workspace:
-            root: ~/
-            paths:
-               - project/old_workflow_id-12-27.txt
 
-      - save_cache:
-              paths: ["project/old_workflow_id-12-27.txt"]
-              key: old_workflow_id_12-27
+
       - run:
           name: Update cloudfront distribution
           command: |
@@ -482,12 +476,10 @@ jobs:
         - image: amazon/aws-cli
     steps:
       - checkout
-      - restore_cache:
-            keys: [old_workflow_id_12-27]
       - run:
           name: Get old stack workflow id
           command: |
-            export  OldWorkflowID=$(cat  old_workflow_id-<< pipeline.parameters.workflow-id >>.txt)
+            export  OldWorkflowID= << pipeline.parameters.old-workflow-id>>
             echo "Old Workflow ID: ${OldWorkflowID}"
            # export OldWorkflowID=$(curl -H "token: << pipeline.parameters.memstash-token >>" --request GET https://api.memstash.io/values/old_workflow_id_${CIRCLE_WORKFLOW_ID})
            
