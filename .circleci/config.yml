@@ -181,7 +181,12 @@ jobs:
               
               echo ${backend_url} >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
-
+              if [ -f "backend-url-27-12.txt" ];
+               then 
+                  echo "backend-url-27-12.txt exists." 
+                else 
+                  echo "backend-url-27-12.txt not exist." 
+                fi  
               echo http://${backend_url}:3030 >> backend-url-27-12.txt
       # - run:
       #     name: save the new back-end url to memory using memstach
@@ -556,31 +561,31 @@ jobs:
 workflows:
   default:
     jobs: 
-     - set-value   
-    #  - build-frontend
-    #  - build-backend
-    #  - test-frontend:
-    #      requires: [build-frontend]
-    #  - test-backend:
-    #      requires: [build-backend]
-    #  - scan-backend:
-    #      requires: [build-backend]
-    #  - scan-frontend:
-    #      requires: [build-frontend]
-    #  - deploy-infrastructure:
-    #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+       
+     - build-frontend
+     - build-backend
+     - test-frontend:
+         requires: [build-frontend]
+     - test-backend:
+         requires: [build-backend]
+     - scan-backend:
+         requires: [build-backend]
+     - scan-frontend:
+         requires: [build-frontend]
+     - deploy-infrastructure:
+         requires: [test-frontend, test-backend, scan-frontend, scan-backend]
 
-    #  - configure-infrastructure:
-    #     requires: [deploy-infrastructure]
-    #  - run-migrations:
-    #     requires: [configure-infrastructure]
-    #  - deploy-frontend:
-    #     requires: [run-migrations]
-    #  - deploy-backend:
-    #     requires: [run-migrations]
-    #  - smoke-test:
-    #     requires: [deploy-backend, deploy-frontend]
-    #  - cloudfront-update: 
-    #       requires: [smoke-test]
-    #  - cleanup:
-    #     requires: [cloudfront-update]
+     - configure-infrastructure:
+        requires: [deploy-infrastructure]
+     - run-migrations:
+        requires: [configure-infrastructure]
+     - deploy-frontend:
+        requires: [run-migrations]
+     - deploy-backend:
+        requires: [run-migrations]
+     - smoke-test:
+        requires: [deploy-backend, deploy-frontend]
+     - cloudfront-update: 
+          requires: [smoke-test]
+     - cleanup:
+        requires: [cloudfront-update]
